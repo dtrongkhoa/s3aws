@@ -15,7 +15,7 @@ BUCKET_NAME='studentimage'
 
 @app.route('/')  
 def home():
-    return render_template("checkIMGID.html")
+    return render_template("checkImgID.html")
 
 @app.route('/checkImg', methods=['post'])
 def checkImg():
