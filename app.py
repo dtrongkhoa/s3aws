@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request
 import boto3
 from botocore.errorfactory import ClientError
+from werkzeug.utils import secure_filename
 import logging
 app = Flask(__name__)
 import aws_key as keys
 
-id = 0;
+id = '0';
 s3 = boto3.client('s3',
                     aws_access_key_id=keys.ACCESS_KEY_ID,
                     aws_secret_access_key= keys.ACCESS_SECRET_KEY,
@@ -22,11 +23,13 @@ def checkImg():
     id = request.form['id']
     try: 
         if s3.head_object(Bucket = BUCKET_NAME, Key = id):
+            msg = 'Exist ID'
             # return doMath.html will be implemented later
-            return render_template('uploadImg.html')
+            return render_template('uploadImg.html', msg=msg)
     except ClientError as e:
         logging.error(e) 
-        return render_template('uploadImg.html')
+        msg = 'You do not have any images yet. Please upload one!'
+        return render_template('uploadImg.html', msg=msg)
 
 
 
@@ -38,15 +41,17 @@ def upload():
         if image.filename == "":
             return "Please select a file"
         if image:
-                s3.upload_file(
-                    Bucket = BUCKET_NAME,
-                    Filename = image,
-                    Key = id,
-                )
-                msg = "Upload Done ! "
+            filename = secure_filename(image.filename)
+            image.save(filename)
+            s3.upload_file(
+                Bucket = BUCKET_NAME,
+                Filename=filename,
+                Key = id,
+            )
+            msg = "Upload Done ! "
 
     return render_template("uploadImg.html",msg =msg)
 
 if __name__ == "__main__":
-    
-    app.run(debug=True)
+    app.run(host="0.0.0.0",port=5000)
+    # app.run(debug=True)
