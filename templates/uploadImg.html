@@ -4,14 +4,13 @@
 	
 </head>
 <center>
-    <h1 >LOGIN SUCCESSFUL</h1>
-    <h2>Upload Image</h2>
-    <h2>{{msg}}</h2>
-    <body>
-        <form action="/upload" enctype="multipart/form-data" method = "POST" >
-            Upload Image: <input type=file name="image" > <br><br>
-            <button type="submit">UPLOAD IMAGE</button>
-        </form>
-    </body>
+    <h1>{{msg}}</h1>
+        <body >
+            <form action="/upload" enctype="multipart/form-data" method = "POST" >
+                Upload Image: <input type=file name="image" > <br><br>
+                <button type="submit">UPLOAD IMAGE</button>
+            </form>
+        </body>
+        {{image}}
 </center>
 </html>
